@@ -110,9 +110,9 @@ profil du terminal zsh:
 
 ```
 echo '' >> $HOME/.zshrc
-echo '## CMake' >> $HOME/.zshrc
-echo 'export PATH="$HOME/.softwares/install/cmake/bin:$PATH"' >> $HOME/.zshrc
-echo 'export ACLOCAL_PATH="$HOME/.softwares/install/cmake/share/aclocal:$ACLOCAL_PATH"' >> $HOME/.zshrc
+echo '## OpenVPN' >> $HOME/.zshrc
+echo 'export PATH="$HOME/.softwares/install/openvpn/sbin:$PATH"' >> $HOME/.zshrc
+echo 'export MANPATH="$HOME/.softwares/install/openvpn/share/aclocal:$MANPATH"' >> $HOME/.zshrc
 ```
 
 Finalement, il ne nous reste plus qu'à prendre en compte ces variables
@@ -135,11 +135,11 @@ cd ..
 Puis supprimez le dossier contenant les fichiers de compilation :
 
 ```
-rm -rf cmake-build
+rm -rf openvpn-build
 ```
 
-Puis finalement le dossier contenant les sources de cmake :
+Puis finalement le dossier contenant les sources de openvpn :
 
 ```
-rm -rf cmake-3.18.3
+rm -rf openvpn-2.6.9
 ```
