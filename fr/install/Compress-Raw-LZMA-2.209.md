@@ -7,7 +7,7 @@ compression et de décompression avec l'algorithme LZMA.
 
 ### Indispensable
 
-* [**XZ**](xz-5.4.6) : XZ fournit la bibliothèque LZMA nécessaire à la
+* [**XZ**](xz-5.4.6.md) : XZ fournit la bibliothèque LZMA nécessaire à la
 compilation de la bibliothèque Perl.
 
 ## Installation

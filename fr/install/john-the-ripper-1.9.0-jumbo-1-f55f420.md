@@ -39,7 +39,7 @@ effectuer ses calculs sur l'ensemble des processeurs de la machine
 
 ### Facultatives
 
-* [**Compress::Raw::LZMA**](Compress-Raw-Lzma-2.209.md) : Le module Perl
+* [**Compress::Raw::LZMA**](Compress-Raw-LZMA-2.209.md) : Le module Perl
 Compress::Raw::LZMA est requis pour faire fonctionner le script `7z2john`.
 
 * [**bsddb3**](bsddb3-6.0.0.md) : Le module Python bsddb3 est requis pour faire
