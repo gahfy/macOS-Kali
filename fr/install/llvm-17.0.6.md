@@ -1,4 +1,4 @@
-# LLVM 17.0.6
+# Installer LLVM 17.0.6 sous macOS depuis les sources
 
 LLVM est une collection d'outils et de programme fournissant des compilateur et
 des éditeurs de liens. Parmi les différents programmes, le compilateur C est
@@ -61,7 +61,7 @@ cd $HOME/.softwares/sources
 Téléchargez ensuite l'archive de la version 17.0.6 de LLVM.
 
 ```
-curl -LO  https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/llvm-project-17.0.6.src.tar.xz
+curl -LO https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/llvm-project-17.0.6.src.tar.xz
 ```
 
 Extrayez ensuite l'archive que vous venez de télécharger :

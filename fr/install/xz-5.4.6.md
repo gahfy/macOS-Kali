@@ -1,4 +1,4 @@
-# XZ 5.4.6
+# Installer XZ 5.4.6 sous macOS depuis les sources
 
 XZ contient des programmes et des bibliothèques permettant la compression et la
 décompression avec l'algorithme LZMA.
@@ -20,7 +20,7 @@ cd $HOME/.softwares/sources
 Téléchargez ensuite l'archive de la version 5.4.6 de XZ.
 
 ```
-curl -LO  https://github.com/tukaani-project/xz/releases/download/v5.4.6/xz-5.4.6.tar.xz
+curl -LO https://github.com/tukaani-project/xz/releases/download/v5.4.6/xz-5.4.6.tar.xz
 ```
 
 Extrayez ensuite l'archive que vous venez de télécharger :

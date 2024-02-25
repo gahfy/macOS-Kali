@@ -1,4 +1,4 @@
-# Installer Compress::Raw::LZMA 2.209
+# Installer Compress::Raw::LZMA 2.209 sous macOS depuis les sources
 
 Compress::Raw::LZMA est une bibliothèque perl fournissant des fonctionnalités de
 compression et de décompression avec l'algorithme LZMA.

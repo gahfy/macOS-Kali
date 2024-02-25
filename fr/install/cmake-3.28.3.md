@@ -22,7 +22,7 @@ cd $HOME/.softwares/sources
 Téléchargez ensuite l'archive de la version 3.28.3 de CMake.
 
 ```
-curl -LO  https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3.tar.gz
+curl -LO https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3.tar.gz
 ```
 
 Extrayez ensuite l'archive que vous venez de télécharger :

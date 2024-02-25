@@ -1,4 +1,4 @@
-# OpenSSL 3.2.1
+# Installer OpenSSL 3.2.1 sous macOS depuis les sources
 
 OpenSSL contient une liste d'outils et de bibliothèques permettant le
 chiffrement/déchiffrement avec plusieurs algorithmes cryptographiques, ainsi
@@ -40,7 +40,7 @@ cd $HOME/.softwares/sources
 Téléchargez ensuite l'archive de la version 3.2.1 de OpenSSL :
 
 ```
-curl -LO  https://www.openssl.org/source/openssl-3.2.1.tar.gz
+curl -LO https://www.openssl.org/source/openssl-3.2.1.tar.gz
 ```
 
 

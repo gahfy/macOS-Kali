@@ -1,4 +1,4 @@
-# LevelDB 1.22
+# Installer LevelDB 1.22 sous macOS depuis les sources
 
 LevelDB est une base de données rapide sous la forme clé/valeur développée par
 Google.
@@ -93,22 +93,11 @@ Nous allons désormais compiler leveldb avec la commande suivante :
 ```
 cmake --build .
 ```
-
-### Test des exécutables
-
-Afin de nous assurer que la version de LevelDB qui vient d'être compilée
-fonctionnera comme prévu, nous vous recommandons de lancer la suite de tests qui
-vérifiera que le comportement des exécutables est conforme à celui attendu :
-
-```
-cmake --build . --target test
 ```
 
 ### Installation
 
-Une fois que vous vous êtes assuré que les exécutables fonctionnenent comme
-attendu, vous pouvez désormais installer LevelDB dans son répertoire de
-destination :
+Vous pouvez désormais installer LevelDB dans son répertoire de destination :
 
 ```
 cmake --build . --target install

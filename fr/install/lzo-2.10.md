@@ -1,8 +1,7 @@
-# Installer LibreSSL 3.8.2 sous macOS depuis les sources
+# Installer LZO 2.10 sous macOS depuis les sources
 
-LibreSSL est une collection d'outils et de bibliothèques compatibles avec
-OpenSSL, mais ayant mis l'accent sur la sécurité et les bonnes pratiques de
-développement
+LZO est un outil permettant la compression et la décompression en utilisant
+l'algorithme LZO.
 
 ## Dépendances
 
@@ -10,7 +9,7 @@ _Aucune_
 
 ## Installation
 
-### Téléchargement des sources
+### Téléchargements des sources
 
 Assurez-vous tout d'abord de bien être dans le répertoire des sources.
 
@@ -18,45 +17,44 @@ Assurez-vous tout d'abord de bien être dans le répertoire des sources.
 cd $HOME/.softwares/sources
 ```
 
-Téléchargez ensuite l'archive de la version 3.8.2 de LibreSSL :
+Téléchargez ensuite l'archive de la version 2.10 de LZO.
 
 ```
-curl -LO https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.8.2.tar.gz
+curl -LO http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
 ```
-
 
 Extrayez ensuite l'archive que vous venez de télécharger :
 
 ```
-tar -xf libressl-3.8.2.tar.gz
+tar -xf lzo-2.10.tar.gz
 ```
 
 ### Création du répertoire de compilation
 
-Créez un répertoire dans lequel nous allons compiler LibreSSL :
+Créez un répertoire dans lequel nous allons compiler LZO :
 
 ```
-mkdir libressl-build
+mkdir lzo-build
 ```
 
 Puis rendez-vous dans ce répertoire :
 
 ```
-cd libressl-build
+cd lzo-build
 ```
 
 ### Configuration de la compilation
 
-Nous allons maintenant configurer la compilation de LibreSSL, en nous contentant
-d'indiquer le répertoire d'installation :
+Nous allons maintenant configurer la compilation de LZO :
 
 ```
-../libressl-3.8.2/configure --prefix=$HOME/.softwares/build/libressl-3.8.2
+../lzo-2.10/configure --prefix=$HOME/.softwares/build/lzo-2.10 \
+    --enable-shared
 ```
 
 ### Compilation
 
-Nous allons désormais compiler LibreSSL avec la commande suivante :
+Nous allons désormais compiler LZO avec la commande suivante :
 
 ```
 make
@@ -64,7 +62,7 @@ make
 
 ### Test des exécutables
 
-Afin de nous assurer que la version de LibreSSL qui vient d'être compilée
+Afin de nous assurer que la version de LZO qui vient d'être compilée
 fonctionnera comme prévu, nous vous recommandons de lancer la suite de tests qui
 vérifiera que le comportement des exécutables est conforme à celui attendu :
 
@@ -75,7 +73,7 @@ make check
 ### Installation
 
 Une fois que vous vous êtes assuré que les exécutables fonctionnenent comme
-attendu, vous pouvez désormais installer LibreSSL dans son répertoire de
+attendu, vous pouvez désormais installer LZO dans son répertoire de
 destination :
 
 ```
@@ -87,7 +85,7 @@ répertoire définitif, nous pouvons créer un lien symbolique vers ce répertoi
 d'installation
 
 ```
-ln -s ../build/libressl-3.8.2 $HOME/.softwares/install/libressl
+ln -s ../build/lzo-2.10 $HOME/.softwares/install/lzo
 ```
 
 Nous pouvons désormais ajouter les variables d'environnement au fichier de
@@ -95,10 +93,8 @@ profil du terminal zsh:
 
 ```
 echo '' >> $HOME/.zshrc
-echo '## LibreSSL' >> $HOME/.zshrc
-echo 'export PATH="$HOME/.softwares/install/libressl/bin:$PATH"' >> $HOME/.zshrc
-echo 'export PKG_CONFIG_PATH="$HOME/.softwares/install/libressl/lib/pkgconfig:$PKG_CONFIG_PATH"' >> $HOME/.zshrc
-echo 'export MANPATH="$HOME/.softwares/install/libressl/share/man:$MANPATH"' >> $HOME/.zshrc
+echo '## LZO' >> $HOME/.zshrc
+echo 'export PKG_CONFIG_PATH="$HOME/.softwares/install/lzo/lib/pkgconfig:$PKG_CONFIG_PATH"' >> $HOME/.zshrc
 ```
 
 Finalement, il ne nous reste plus qu'à prendre en compte ces variables
@@ -121,11 +117,11 @@ cd ..
 Puis supprimez le dossier contenant les fichiers de compilation :
 
 ```
-rm -rf libressl-build
+rm -rf lzo-build
 ```
 
-Puis finalement le dossier contenant les sources de libressl :
+Puis finalement le dossier contenant les sources de lzo :
 
 ```
-rm -rf libressl-3.8.2
+rm -rf lzo-2.10
 ```

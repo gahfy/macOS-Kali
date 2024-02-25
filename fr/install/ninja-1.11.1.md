@@ -1,4 +1,4 @@
-# Ninja 1.11.1
+# Installer Ninja 1.11.1 sous macOS depuis les sources
 
 Ninja est un système de compilation de taille réduite qui met l'accent sur la
 rapidité de compilation.

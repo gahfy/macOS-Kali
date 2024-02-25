@@ -1,4 +1,4 @@
-# John the Ripper 1.9.0 Jumbo 1 (f55f420)
+# Installer John the Ripper 1.9.0 Jumbo 1 (f55f420)  sous macOS depuis les sources
 
 John the Ripper est un outil d'audit de sécurité et de récupération de mot de
 passe.
@@ -28,7 +28,7 @@ Ripper](https://github.com/openwall/john/tree/f55f42067431c0e8f67e600768cd8a3ad8
 
 _Aucune_
 
-### Très fortement recommandés
+### Très fortement recommandées
 
 * [**LibreSSL**](libressl-3.8.2.md) : Bien que John the Ripper soit compilable
 sans, considérez que la majorité des fonctionnalitées de l'outil seront
@@ -106,7 +106,7 @@ Téléchargez ensuite l'archive de la version de John the Ripper correspondant a
 commit `f55420`.
 
 ```
-curl -LO  https://github.com/openwall/john/archive/f55f42067431c0e8f67e600768cd8a3ad8439818.zip
+curl -LO https://github.com/openwall/john/archive/f55f42067431c0e8f67e600768cd8a3ad8439818.zip
 ```
 
 Extrayez ensuite l'archive que vous venez de télécharger :
