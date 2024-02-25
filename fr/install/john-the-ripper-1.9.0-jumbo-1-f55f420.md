@@ -42,39 +42,39 @@ effectuer ses calculs sur l'ensemble des processeurs de la machine
 * [**Compress::Raw::LZMA**](Compress-Raw-LZMA-2.209.md) : Le module Perl
 Compress::Raw::LZMA est requis pour faire fonctionner le script `7z2john`.
 
-* [**bsddb3**](bsddb3-6.0.0.md) : Le module Python bsddb3 est requis pour faire
+* [**bsddb3**](bsddb3.md) : Le module Python bsddb3 est requis pour faire
 fonctionner le script `bitcoin2john`.
 
-* [**plyvel**](plyvel-1.5.1.md) : Le module Python plyvel est requis pour faire
+* [**plyvel**](plyvel.md) : Le module Python plyvel est requis pour faire
 fonctionner le script `bitwarden2john`
 
-* [**pyasn1**](pyasn1-0.5.1) : Le module Python pyasn1 est requis pour faire
+* [**pyasn1**](pyasn1.md) : Le module Python pyasn1 est requis pour faire
 fonctionner les scripts `ccache2john` et `kirbi2john`
 
-* [**parsimonious**](parsimonious-0.10.0.md) : Le module Python parsimonious est
+* [**parsimonious**](parsimonious.md) : Le module Python parsimonious est
 requis pour faire fonctionner le script `ejabberd2john`
 
-* [**lxml**](lxml-5.1.0.md) : Le module Python python-lxml est requis pour faire
+* [**lxml**](lxml.md) : Le module Python python-lxml est requis pour faire
 fonctionner le script `krb2john`
 
 * [**protobuf <= 3.20.3**](protobuf-3.20.3.md) : Le module Python protobuf est 
 requis pour faire fonctionner le script `multibit2john`
 
-* [**scapy**](scapy-2.5.0.md) : Le module Python scapy est requis pour faire
+* [**scapy**](scapy.md) : Le module Python scapy est requis pour faire
 fonctionner les scripts `pcap2john` et `radius2john`
 
-* [**dpkt**](dpkt-1.9.8.md) : Le module Python dpkt est requis pour faire
+* [**dpkt**](dpkt.md) : Le module Python dpkt est requis pour faire
 fonctionner le script `pcap2john`
 
-* [**asn1crypto**](asn1crypto-1.5.1.md) : Le module Python asn1crypto est requis
+* [**asn1crypto**](asn1crypto.md) : Le module Python asn1crypto est requis
 pour faire fonctionner les scripts `pem2john` et `pfx2john`
 
-* [**ldap3**](ldap3-2.9.1.md) : Le module Python ldap3 est requis pour faire
+* [**ldap3**](ldap3.md) : Le module Python ldap3 est requis pour faire
 fonctionner le script `sspr2john`
 
 ### Non recommandées
 
-* [**PyCrypto**](PyCrypto-2.6.1.md) : Le module Python PyCrypto est requis pour
+* [**PyCrypto**](pycrypto.md) : Le module Python PyCrypto est requis pour
 faire fonctionner les scripts `DPAPImk2john` et `zed2john`. Toutefois, elle est
 obsolète, non maintenue et présente des failles de sécurité. En conséquence,
 nous vous recommandons de l'installer uniquement si l'un de ces deux binaires
