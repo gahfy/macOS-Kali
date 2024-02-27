@@ -112,7 +112,7 @@ profil du terminal zsh:
 echo '' >> $HOME/.zshrc
 echo '## OpenVPN' >> $HOME/.zshrc
 echo 'export PATH="$HOME/.softwares/install/openvpn/sbin:$PATH"' >> $HOME/.zshrc
-echo 'export MANPATH="$HOME/.softwares/install/openvpn/share/aclocal:$MANPATH"' >> $HOME/.zshrc
+echo 'export MANPATH="$HOME/.softwares/install/openvpn/share/man:$MANPATH"' >> $HOME/.zshrc
 ```
 
 Finalement, il ne nous reste plus qu'à prendre en compte ces variables
