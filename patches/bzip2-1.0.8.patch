@@ -1,0 +1,30 @@
+diff --git a/Makefile-libbz2_so b/Makefile-libbz2_so
+--- a/Makefile-libbz2_so
++++ b/Makefile-libbz2_so
+@@ -1,6 +1,6 @@
+ 
+ # This Makefile builds a shared version of the library, 
+-# libbz2.so.1.0.8, with soname libbz2.so.1.0,
++# libbz2.1.0.8.dylib, with install_name libbz2.1.0.dylib,
+ # at least on x86-Linux (RedHat 7.2), 
+ # with gcc-2.96 20000731 (Red Hat Linux 7.1 2.96-98).  
+ # Please see the README file for some important info 
+@@ -35,13 +35,13 @@
+       bzlib.o
+ 
+ all: $(OBJS)
+-	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
+-	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.so.1.0.8
+-	rm -f libbz2.so.1.0
+-	ln -s libbz2.so.1.0.8 libbz2.so.1.0
++	$(CC) -shared -Wl,-install_name -Wl,libbz2.1.0.dylib -o libbz2.1.0.8.dylib $(OBJS) -current_version 1.0.8 -compatibility_version 1.0.0
++	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.1.0.8.dylib
++	rm -f libbz2.1.0.dylib
++	ln -s libbz2.1.0.8.dylib libbz2.1.0.dylib
+ 
+ clean: 
+-	rm -f $(OBJS) bzip2.o libbz2.so.1.0.8 libbz2.so.1.0 bzip2-shared
++	rm -f $(OBJS) bzip2.o libbz2.1.0.8.dylib libbz2.1.0.dylib bzip2-shared
+ 
+ blocksort.o: blocksort.c
+ 	$(CC) $(CFLAGS) -c blocksort.c

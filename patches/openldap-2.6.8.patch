@@ -1,0 +1,12 @@
+diff --git a/build/top.mk b/build/top.mk
+--- a/build/top.mk
++++ b/build/top.mk
+@@ -153,7 +153,7 @@
+ MANCOMPRESS=$(CAT)
+ MANCOMPRESSSUFFIX=
+ 
+-SOELIM=soelim
++SOELIM=mandoc_soelim
+ 
+ INCLUDEDIR= $(top_srcdir)/include
+ LDAP_INCPATH= -I$(LDAP_INCDIR) -I$(INCLUDEDIR)
