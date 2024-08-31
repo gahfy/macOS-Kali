@@ -6,9 +6,9 @@ source $HOME/.zshrc
 # Runtime dependencies: ncurses and libiconv
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="1.21.3"
+PROGRAM_NAME="krb5"
+SHA512_SUM="87bc06607f4d95ff604169cea22180703a42d667af05f66f1569b8bd592670c42820b335e5c279e8b4f066d1e7da20f1948a1e4def7c5d295c170cbfc7f49c71"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -50,22 +50,19 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses
 fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
-  "$PROGRAM_FULL.tar.xz" \
+  "https://kerberos.org/dist/krb5/1.21/${PROGRAM_FULL}.tar.gz" \
+  "$PROGRAM_FULL.tar.gz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
-tar -xf $PROGRAM_FULL.tar.xz
+tar -xf $PROGRAM_FULL.tar.gz
 if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
   echo "Removing build directory"
   rm -rf $SOURCES_DIR/$PROGRAM_NAME-build
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
+../$PROGRAM_FULL/src/configure --prefix=$PROGRAM_INSTALL_PREFIX
 make -j$(sysctl -n hw.ncpu)
-make -j$(sysctl -n hw.ncpu) check
 make -j$(sysctl -n hw.ncpu) install
 cd $SOURCES_DIR
 rm -rf $PROGRAM_FULL

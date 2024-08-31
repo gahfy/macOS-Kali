@@ -97,6 +97,12 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_
     exit 1
   fi
 fi
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_PREFIX}swig > /dev/null; then
+  if ! TEMP=$IS_TEMP $BASE_DIR/swig-4.2.1.sh 2> /dev/null; then
+    echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs ${TEMP_PREFIX}swig which failed to install"
+    exit 1
+  fi
+fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
   "https://github.com/llvm/llvm-project/releases/download/llvmorg-${PROGRAM_VERSION}/llvm-project-${PROGRAM_VERSION}.src.tar.xz" \
@@ -305,6 +311,33 @@ if [ -L $INSTALL_DIR/$PROGRAM_NAME ]; then
 fi
 ln -s ../build/$TEMP_PREFIX$PROGRAM_FULL $INSTALL_DIR/$PROGRAM_NAME
 mkdir -p ${INSTALL_DIR}/compiler-defaults/bin
+if [ -L $INSTALL_DIR/compiler-defaults/bin/cc ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/cc
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/gcc ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/gcc
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/cpp ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/cpp
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/c++ ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/c++
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/g++ ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/g++
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/ar ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/ar
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/objdump ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/objdump
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/nm ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/nm
+fi
+if [ -L $INSTALL_DIR/compiler-defaults/bin/as ]; then
+  rm $INSTALL_DIR/compiler-defaults/bin/as
+fi
 ln -s ../../llvm/bin/clang-${PROGRAM_VERSION_MAJOR} ${INSTALL_DIR}/compiler-defaults/bin/cc
 ln -s ../../llvm/bin/clang-${PROGRAM_VERSION_MAJOR} ${INSTALL_DIR}/compiler-defaults/bin/gcc
 ln -s ../../llvm/bin/clang-${PROGRAM_VERSION_MAJOR} ${INSTALL_DIR}/compiler-defaults/bin/cpp

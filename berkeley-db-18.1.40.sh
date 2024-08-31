@@ -6,9 +6,9 @@ source $HOME/.zshrc
 # Runtime dependencies: ncurses and libiconv
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="18.1.40"
+PROGRAM_NAME="berkeley-db"
+SHA512_SUM="53787164fb8a198a0178c7f58d891c2b0943d1c52b11fe9de525938469327e85664f0bc63e33d740c171bc370954710a6b3e8b9be2a08237fb9757a795c5b19e"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -35,41 +35,40 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-ll
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
-  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libiconv which failed to install"
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libedit; then
+  if ! $BASE_DIR/libedit-3.1.2024.08.08.sh 2> /dev/null; then
+    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libedit which failed to install"
     exit 1
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses; then
-  if ! $BASE_DIR/ncurses-6.5.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs ncurses which failed to install"
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh bison; then
+  if ! $BASE_DIR/bison-3.8.2.sh 2> /dev/null; then
+    echo "$PROGRAM_NAME $PROGRAM_VERSION needs bison which failed to install"
     exit 1
   fi
 fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
-  "$PROGRAM_FULL.tar.xz" \
+  "https://download.oracle.com/berkeley-db/db-${PROGRAM_VERSION}.tar.gz" \
+  "db-${PROGRAM_VERSION}.tar.gz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
-tar -xf $PROGRAM_FULL.tar.xz
-if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
-  echo "Removing build directory"
-  rm -rf $SOURCES_DIR/$PROGRAM_NAME-build
-fi
-mkdir -p $PROGRAM_NAME-build
-cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
-make -j$(sysctl -n hw.ncpu)
-make -j$(sysctl -n hw.ncpu) check
-make -j$(sysctl -n hw.ncpu) install
+tar -xf db-${PROGRAM_VERSION}.tar.gz
+cd db-${PROGRAM_VERSION}/build_unix
+  CFLAGS="-I$BUILD_DIR/temp-openssl-3.3.1/include" \
+  LDFLAGS="-L$BUILD_DIR/temp-openssl-3.3.1/lib" \
+  ../dist/configure --prefix=$PROGRAM_INSTALL_PREFIX \
+  --enable-cxx \
+  --enable-compat185 \
+  --enable-sql \
+  --enable-sql_codegen \
+  --enable-dbm
+make
+make check
+make install DOCLIST=license
 cd $SOURCES_DIR
-rm -rf $PROGRAM_FULL
-rm -rf $PROGRAM_NAME-build
+rm -rf db-${PROGRAM_VERSION}
 if [ -L $INSTALL_DIR/$PROGRAM_NAME ]; then
     rm $INSTALL_DIR/$PROGRAM_NAME
 fi

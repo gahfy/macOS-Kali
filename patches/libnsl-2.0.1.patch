@@ -1,0 +1,110 @@
+diff -ruN a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2023-10-13 10:58:29
++++ b/src/Makefile.in	2024-08-28 13:48:29
+@@ -372,8 +372,7 @@
+ noinst_HEADERS = internal.h libc-lock.h
+ lib_LTLIBRARIES = libnsl.la
+ libnsl_la_LDFLAGS = -version-info 3:0:0 \
+-	-Wl,--no-undefined \
+-	-Wl,--version-script=$(srcdir)/libnsl.map
++	-Wl,-exported_symbols_list,$(srcdir)/libnsl.map
+ 
+ libnsl_la_LIBADD = @TIRPC_LIBS@ @LTLIBINTL@
+ libnsl_la_SOURCES = yp_xdr.c do_ypcall.c ypprot_err.c yp_master.c \
+diff -ruN a/src/libnsl.map b/src/libnsl.map
+--- a/src/libnsl.map	2023-10-10 11:16:48
++++ b/src/libnsl.map	2024-08-28 13:45:43
+@@ -1,50 +1,43 @@
+-LIBNSL_2.0 {
+-  global:
+-    # YP/XDR functions:
+-    taddr2host;
+-    taddr2ipstr;
+-    taddr2port;
+-    xdr_domainname;
+-    xdr_keydat;
+-    xdr_valdat;
+-    xdr_ypbind2_binding;
+-    xdr_ypbind2_resp;
+-    xdr_ypbind2_setdom;
+-    xdr_ypbind3_binding;
+-    xdr_ypbind3_resp;
+-    xdr_ypbind3_setdom;
+-    xdr_ypbind_oldsetdom;
+-    xdr_ypbind_resptype;
+-    xdr_ypmap_parms;
+-    xdr_ypmaplist;
+-    xdr_yppushresp_xfr;
+-    xdr_ypreq_key;
+-    xdr_ypreq_newxfr;
+-    xdr_ypreq_nokey;
+-    xdr_ypreq_xfr;
+-    xdr_ypresp_all;
+-    xdr_ypresp_key_val;
+-    xdr_ypresp_maplist;
+-    xdr_ypresp_master;
+-    xdr_ypresp_order;
+-    xdr_ypresp_val;
+-    xdr_ypresp_xfr;
+-    xdr_ypstat;
+-    xdr_ypxfrstat;
+-    yp_all;
+-    yp_bind;
+-    yp_first;
+-    yp_get_default_domain;
+-    yp_maplist;
+-    yp_master;
+-    yp_match;
+-    yp_next;
+-    yp_order;
+-    yp_unbind;
+-    ypbinderr_string;
+-    yperr_string;
+-    ypprot_err;
+-
+-  local:
+-    *;
+-};
++taddr2host
++taddr2ipstr
++taddr2port
++xdr_domainname
++xdr_keydat
++xdr_valdat
++xdr_ypbind2_binding
++xdr_ypbind2_resp
++xdr_ypbind2_setdom
++xdr_ypbind3_binding
++xdr_ypbind3_resp
++xdr_ypbind3_setdom
++xdr_ypbind_oldsetdom
++xdr_ypbind_resptype
++xdr_ypmap_parms
++xdr_ypmaplist
++xdr_yppushresp_xfr
++xdr_ypreq_key
++xdr_ypreq_newxfr
++xdr_ypreq_nokey
++xdr_ypreq_xfr
++xdr_ypresp_all
++xdr_ypresp_key_val
++xdr_ypresp_maplist
++xdr_ypresp_master
++xdr_ypresp_order
++xdr_ypresp_val
++xdr_ypresp_xfr
++xdr_ypstat
++xdr_ypxfrstat
++yp_all
++yp_bind
++yp_first
++yp_get_default_domain
++yp_maplist
++yp_master
++yp_match
++yp_next
++yp_order
++yp_unbind
++ypbinderr_string
++yperr_string
++ypprot_err

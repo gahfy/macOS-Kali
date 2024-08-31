@@ -3,12 +3,12 @@ set -e
 touch $HOME/.zshrc
 source $HOME/.zshrc
 
-# Runtime dependencies: ncurses and libiconv
+# No runtime dependencies
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="1.5.0"
+PROGRAM_NAME="nghttp3"
+SHA512_SUM="76a089fb0dd88b9aced41fccf36758c6504f8faf68c143ca81c260c017ac6dfd83fe678c401304de8bf65e859b0559dc5e8fcb37e88e547076d0ba9fd2c4a59c"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -35,22 +35,8 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-ll
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
-  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libiconv which failed to install"
-    exit 1
-  fi
-fi
-
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses; then
-  if ! $BASE_DIR/ncurses-6.5.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs ncurses which failed to install"
-    exit 1
-  fi
-fi
-
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
+  "https://github.com/ngtcp2/nghttp3/releases/download/v${PROGRAM_VERSION}/${PROGRAM_FULL}.tar.xz" \
   "$PROGRAM_FULL.tar.xz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
@@ -61,12 +47,10 @@ if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
-make -j$(sysctl -n hw.ncpu)
-make -j$(sysctl -n hw.ncpu) check
-make -j$(sysctl -n hw.ncpu) install
+../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
+make 
+make check
+make install
 cd $SOURCES_DIR
 rm -rf $PROGRAM_FULL
 rm -rf $PROGRAM_NAME-build

@@ -71,7 +71,7 @@ if [ -d "$INSTALL_DIR/$PROGRAM_NAME/share" ]; then
       fi
       if [ -n "$vimline" ]; then
         echo '' >> $HOME/.zshrc
-      echo '" '"$PROGRAM_NAME" >> $HOME/.vimrc
+        echo '" '"$PROGRAM_NAME" >> $HOME/.vimrc
       fi
       echo ''  >> $HOME/.vimrc
       echo '" '"$PROGRAM_NAME$vimline" >> $HOME/.vimrc

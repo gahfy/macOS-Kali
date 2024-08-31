@@ -78,6 +78,12 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_
     exit 1
   fi
 fi
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_PREFIX}Python; then
+  if ! TEMP=$IS_TEMP $BASE_DIR/Python-3.12.5.sh 2> /dev/null; then
+    echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs ${TEMP_PREFIX}ncurses which failed to install"
+    exit 1
+  fi
+fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
   "https://download.gnome.org/sources/libxml2/${PROGRAM_VERSION_MINOR}/$PROGRAM_FULL.tar.xz" \

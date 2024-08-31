@@ -40,7 +40,6 @@ if ((IS_TEMP == 0)); then
       exit 1
     fi
   fi
-  other_checks
 fi
 if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_PREFIX}pcre2; then
   if ! TEMP=$IS_TEMP $BASE_DIR/pcre2-10.44.sh 2> /dev/null; then

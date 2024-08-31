@@ -42,6 +42,14 @@ if ((IS_TEMP == 0)); then
     fi
   fi
 
+  ## CMake
+  if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-cmake && ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh cmake; then
+    if ! TEMP=1 $BASE_DIR/cmake-3.30.2 2> /dev/null; then
+      echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs LLVM (at least temporary version) which failed to install"
+      exit 1
+    fi
+  fi
+
   ## zlib
   if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh zlib; then
     if ! TEMP=0 $BASE_DIR/zlib-1.3.1.sh 2> /dev/null; then
@@ -80,10 +88,25 @@ if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-../$PROGRAM_FULL/bootstrap --parallel=$(sysctl -n hw.ncpu) --prefix=$PROGRAM_INSTALL_PREFIX
-make -j$(sysctl -n hw.ncpu)
-make -j$(sysctl -n hw.ncpu) test
-make -j$(sysctl -n hw.ncpu) install
+if ((IS_TEMP == 0)); then
+  cmake -G Ninja ../$PROGRAM_FULL -DCMAKE_INSTALL_PREFIX=$PROGRAM_INSTALL_PREFIX \
+    -DZLIB_INCLUDE_DIR=$BUILD_DIR/zlib-1.3.1/include \
+    -DZLIB_LIBRARY=$BUILD_DIR/zlib-1.3.1/lib/libz.1.3.1.dylib \
+    -DCURSES_NCURSES_LIBRARY=$BUILD_DIR/ncurses-6.5/lib/libncursesw.6.dylib \
+    -DCURSES_INCLUDE_PATH=$BUILD_DIR/ncurses-6.5/include \
+    -DCURSES_FORM_LIBRARY=$BUILD_DIR/ncurses-6.5/lib/libformw.6.dylib \
+    -DCURSES_CURSES_LIBRARY=$BUILD_DIR/ncurses-6.5/lib/libncursesw.6.dylib \
+    -DCURL_INCLUDE_DIR=$BUILD_DIR/curl-8.9.1/include \
+    -DCURL_LIBRARY=$BUILD_DIR/curl-8.9.1/lib/libcurl.4.dylib \
+    -DBUILD_TESTING=OFF
+  cmake --build .
+  cmake --build . --target install
+else
+  ../$PROGRAM_FULL/bootstrap --parallel=$(sysctl -n hw.ncpu) --prefix=$PROGRAM_INSTALL_PREFIX
+  make -j$(sysctl -n hw.ncpu)
+  make -j$(sysctl -n hw.ncpu) test
+  make -j$(sysctl -n hw.ncpu) install
+fi
 cd $SOURCES_DIR
 rm -rf $PROGRAM_FULL
 rm -rf $PROGRAM_NAME-build

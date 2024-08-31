@@ -3,12 +3,13 @@ set -e
 touch $HOME/.zshrc
 source $HOME/.zshrc
 
-# Runtime dependencies: ncurses and libiconv
+# Runtime dependencies: ncurses
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION_MINOR="2.40"
+PROGRAM_VERSION="2.40.2"
+PROGRAM_NAME="util-linux"
+SHA512_SUM="ffe20b915a518a150401d429b0338bc7022190e4ca0ef91a6d9eea345db8c1e11ad01784163b8fcf978506f3f5cad473f29d5d4ef93a4c66a5ae0ebd9fb0c8f2"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -35,37 +36,30 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-ll
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
-  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libiconv which failed to install"
-    exit 1
-  fi
-fi
-
 if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses; then
-  if ! $BASE_DIR/ncurses-6.5.sh 2> /dev/null; then
+  if ! $BASE_DIR/ncurses6.5.sh 2> /dev/null; then
     echo "$PROGRAM_NAME $PROGRAM_VERSION needs ncurses which failed to install"
     exit 1
   fi
 fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
+  "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${PROGRAM_VERSION_MINOR}/${PROGRAM_FULL}.tar.xz" \
   "$PROGRAM_FULL.tar.xz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
 tar -xf $PROGRAM_FULL.tar.xz
+cp $BASE_DIR/patches/$PROGRAM_FULL.patch $SOURCES_DIR/$PROGRAM_FULL.patch
+patch --directory=$PROGRAM_FULL/ --strip=1 < $SOURCES_DIR/$PROGRAM_FULL.patch
 if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
   echo "Removing build directory"
   rm -rf $SOURCES_DIR/$PROGRAM_NAME-build
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
+../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX \
+  --disable-use-tty-group --disable-liblastlog2
 make -j$(sysctl -n hw.ncpu)
-make -j$(sysctl -n hw.ncpu) check
 make -j$(sysctl -n hw.ncpu) install
 cd $SOURCES_DIR
 rm -rf $PROGRAM_FULL

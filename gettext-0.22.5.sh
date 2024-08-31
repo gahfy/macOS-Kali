@@ -6,9 +6,9 @@ source $HOME/.zshrc
 # Runtime dependencies: ncurses and libiconv
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="0.22.5"
+PROGRAM_NAME="gettext"
+SHA512_SUM="d8b22d7fba10052a2045f477f0a5b684d932513bdb3b295c22fbd9dfc2a9d8fccd9aefd90692136c62897149aa2f7d1145ce6618aa1f0be787cb88eba5bc09be"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -49,8 +49,15 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses
   fi
 fi
 
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh bison; then
+  if ! $BASE_DIR/bison-3.8.2.sh 2> /dev/null; then
+    echo "$PROGRAM_NAME $PROGRAM_VERSION needs bison which failed to install"
+    exit 1
+  fi
+fi
+
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
+  "https://ftp.gnu.org/pub/gnu/gettext/${PROGRAM_FULL}.tar.gz" \
   "$PROGRAM_FULL.tar.xz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
@@ -61,9 +68,20 @@ if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
+../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX \
+  --with-libiconv-prefix=$BUILD_DIR/libiconv-1.17 \
+  --with-libncurses-prefix=$BUILD_DIR/ncurses-6.5 \
+  --with-bison-prefix=$BUILD_DIR/bison-3.8.2 \
+  --with-included-glib \
+  --with-included-libcroco \
+  --with-included-libunistring \
+  --with-included-libxml \
+  --with-emacs \
+  --disable-java \
+  --disable-csharp \
+  --without-git \
+  --without-cvs \
+  --with-included-gettext
 make -j$(sysctl -n hw.ncpu)
 make -j$(sysctl -n hw.ncpu) check
 make -j$(sysctl -n hw.ncpu) install

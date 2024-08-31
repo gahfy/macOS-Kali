@@ -3,12 +3,12 @@ set -e
 touch $HOME/.zshrc
 source $HOME/.zshrc
 
-# Runtime dependencies: ncurses and libiconv
+# No runtime dependencies
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="1.11.0"
+PROGRAM_NAME="libssh2"
+SHA512_SUM="ef85e152dc252bd9b1c05276972b9c22313f5d492743dde090235742746d67f634f2a419eff9162132e2274c8582113b75279b074e0c7b34b2526b92fd1a1e8e"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -35,38 +35,27 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-ll
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
-  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libiconv which failed to install"
-    exit 1
-  fi
-fi
-
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses; then
-  if ! $BASE_DIR/ncurses-6.5.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs ncurses which failed to install"
-    exit 1
-  fi
-fi
-
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
-  "$PROGRAM_FULL.tar.xz" \
+  "https://libssh2.org/download/${PROGRAM_FULL}.tar.gz" \
+  "$PROGRAM_FULL.tar.gz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
-tar -xf $PROGRAM_FULL.tar.xz
+tar -xf $PROGRAM_FULL.tar.gz
 if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
   echo "Removing build directory"
   rm -rf $SOURCES_DIR/$PROGRAM_NAME-build
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
-make -j$(sysctl -n hw.ncpu)
-make -j$(sysctl -n hw.ncpu) check
-make -j$(sysctl -n hw.ncpu) install
+../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX \
+  --with-libz-prefix=$BUILD_DIR/zlib-1.3.1 \
+  --with-libssl-prefix=$BUILD_DIR/libressl-3.9.2 \
+  --with-crypto=openssl \
+  --with-libz \
+  --disable-docker-tests
+make 
+make check
+make install
 cd $SOURCES_DIR
 rm -rf $PROGRAM_FULL
 rm -rf $PROGRAM_NAME-build

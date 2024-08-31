@@ -3,7 +3,7 @@ set -e
 touch $HOME/.zshrc
 source $HOME/.zshrc
 
-# Runtime dependencies: libiconv
+# Runtime dependencies: cyrus-sasl and libressl
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
 PROGRAM_VERSION="2.6.8"
@@ -63,7 +63,10 @@ if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX \
+CFLAGS="-I${BUILD_DIR}/cyrus-sasl-2.1.28/include -I${BUILD_DIR}/libressl-3.9.2/include" \
+  CPPFLAGS="-I${BUILD_DIR}/cyrus-sasl-2.1.28/include -I${BUILD_DIR}/libressl-3.9.2/include" \
+  LDFLAGS="-L${BUILD_DIR}/cyrus-sasl-2.1.28/lib -L${BUILD_DIR}/libressl-3.9.2/lib" \
+  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX \
   --enable-accesslog \
   --enable-auditlog \
   --enable-bdb=no \
@@ -81,7 +84,8 @@ cd $PROGRAM_NAME-build
   --enable-seqmod \
   --enable-translucent \
   --enable-unique \
-  --enable-valsort
+  --enable-valsort \
+  --with-tls=openssl
 make -j$(sysctl -n hw.ncpu)
 make -j$(sysctl -n hw.ncpu) check
 make -j$(sysctl -n hw.ncpu) install

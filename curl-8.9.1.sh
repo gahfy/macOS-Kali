@@ -3,12 +3,12 @@ set -e
 touch $HOME/.zshrc
 source $HOME/.zshrc
 
-# Runtime dependencies: ncurses and libiconv
+# Runtime dependencies: libiconv
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="8.9.1"
+PROGRAM_NAME="curl"
+SHA512_SUM="a0fe234402875db194aad4e4208b7e67e7ffc1562622eea90948d4b9b0122c95c3dde8bbe2f7445a687cb3de7cb09f20e5819d424570442d976aa4c913227fc7"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -35,22 +35,22 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-ll
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
-  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libiconv which failed to install"
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh m4; then
+  if ! $BASE_DIR/m4-1.4.19.sh 2> /dev/null; then
+    echo "$PROGRAM_NAME $PROGRAM_VERSION needs m4 which failed to install"
     exit 1
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses; then
-  if ! $BASE_DIR/ncurses-6.5.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs ncurses which failed to install"
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
+  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
+    echo "$PROGRAM_NAME $PROGRAM_VERSION needs texinfo which failed to install"
     exit 1
   fi
 fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
+  "https://curl.se/download/${PROGRAM_FULL}.tar.xz" \
   "$PROGRAM_FULL.tar.xz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
@@ -61,9 +61,20 @@ if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
+CFLAGS="-I${BUILD_DIR}/krb5-1.21.3/include -I${BUILD_DIR}/cyrus-sasl-2.1.28/include" \
+  CPPFLAGS="-I${BUILD_DIR}/krb5-1.21.3/include -I${BUILD_DIR}/cyrus-sasl-2.1.28/include" \
+  LDFLAGS="-L${BUILD_DIR}/krb5-1.21.3/lib -L${BUILD_DIR}/cyrus-sasl-2.1.28/lib" \
+  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX \
+  --with-openssl=$BUILD_DIR/libressl-3.9.2 \
+  --with-zlib=$BUILD_DIR/zlib-1.3.1 \
+  --with-brotli=$BUILD_DIR/brotli-1.1.0 \
+  --with-zstd=$BUILD_DIR/zstd-1.5.6 \
+  --with-libssh2=$BUILD_DIR/libssh2-1.11.0 \
+  --with-libidn2=$BUILD_DIR/libidn2-2.3.7 \
+  --with-nghttp2=$BUILD_DIR/nghttp2-1.63.0 \
+  --with-ngtcp2=$BUILD_DIR/ngtcp-1.7.0 \
+  --with-nghttp3=$BUILD_DIR/nghttp3-1.5.0 \
+  --with-gssapi
 make -j$(sysctl -n hw.ncpu)
 make -j$(sysctl -n hw.ncpu) check
 make -j$(sysctl -n hw.ncpu) install

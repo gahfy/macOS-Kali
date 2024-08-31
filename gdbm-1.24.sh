@@ -3,12 +3,12 @@ set -e
 touch $HOME/.zshrc
 source $HOME/.zshrc
 
-# Runtime dependencies: ncurses and libiconv
+# Runtime dependencies: readline and ncurses
 
 ## TO BE EDITED ACCORDING TO YOUR PREFERENCES
-PROGRAM_VERSION="7.1"
-PROGRAM_NAME="texinfo"
-SHA512_SUM="ceab03e8422d800b08c7b44e8263b0a1f35bb7758d83a81136df6f3304a14daecda98a12a282afb85406d2ca2f665b2295e10b6f4064156ea1285d80d5d355db"
+PROGRAM_VERSION="1.24"
+PROGRAM_NAME="gdbm"
+SHA512_SUM="401ff8c707079f21da1ac1d6f4714a87f224b6f41943078487dc891be49f51fd1ac7a32fd599aae0fad185f2c6ba7432616d328fd6aaab068eb54db9562ff7fa"
 
 ## EDIT WITH CARE
 SOFTWARES_DIR="${SOFTWARES_DIR:-$HOME/.softwares}"
@@ -35,9 +35,9 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-ll
   fi
 fi
 
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh libiconv; then
-  if ! $BASE_DIR/libiconv-1.17.sh 2> /dev/null; then
-    echo "$PROGRAM_NAME $PROGRAM_VERSION needs libiconv which failed to install"
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh readline; then
+  if ! $BASE_DIR/readline-8.2.13.sh 2> /dev/null; then
+    echo "$PROGRAM_NAME $PROGRAM_VERSION needs readline which failed to install"
     exit 1
   fi
 fi
@@ -50,28 +50,26 @@ if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ncurses
 fi
 
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/download-file.sh \
-  "https://ftp.gnu.org/gnu/texinfo/${PROGRAM_FULL}.tar.xz" \
-  "$PROGRAM_FULL.tar.xz" \
+  "https://ftp.gnu.org/gnu/gdbm/${PROGRAM_FULL}.tar.gz" \
+  "$PROGRAM_FULL.tar.gz" \
   "$SHA512_SUM"
 cd $SOURCES_DIR
-tar -xf $PROGRAM_FULL.tar.xz
+tar -xf $PROGRAM_FULL.tar.gz
 if [ -d "$SOURCES_DIR/$PROGRAM_NAME-build" ]; then
   echo "Removing build directory"
   rm -rf $SOURCES_DIR/$PROGRAM_NAME-build
 fi
 mkdir -p $PROGRAM_NAME-build
 cd $PROGRAM_NAME-build
-CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I$BUILD_DIR/ncurses-6.5/include/ncursesw -I$BUILD_DIR/ncurses-6.5/include -I$BUILD_DIR/libiconv-1.17/include" \
-  LDFLAGS="-L$BUILD_DIR/ncurses-6.5/lib -Wl,-search_paths_first -L$BUILD_DIR/libiconv-1.17/lib" \
-  ../$PROGRAM_FULL/configure --prefix=$PROGRAM_INSTALL_PREFIX
+CFLAGS="-D_DARWIN_C_SOURCE -DNCURSES_WIDECHAR -I${BUILD_DIR}/readline-8.2.13/include -I${BUILD_DIR}/ncurses-6.5/include/ncursesw -I${BUILD_DIR}/ncurses-6.5/include" \
+  LDFLAGS="-L${BUILD_DIR}/readline-8.2.13/lib -L${BUILD_DIR}/ncurses-6.5/lib" \
+  ../${PROGRAM_FULL}/configure --prefix=${PROGRAM_INSTALL_PREFIX} \
+  --enable-libgdbm-compat
 make -j$(sysctl -n hw.ncpu)
 make -j$(sysctl -n hw.ncpu) check
 make -j$(sysctl -n hw.ncpu) install
 cd $SOURCES_DIR
-rm -rf $PROGRAM_FULL
-rm -rf $PROGRAM_NAME-build
-if [ -L $INSTALL_DIR/$PROGRAM_NAME ]; then
-    rm $INSTALL_DIR/$PROGRAM_NAME
-fi
-ln -s ../build/$PROGRAM_FULL $INSTALL_DIR/$PROGRAM_NAME
+rm -rf ${PROGRAM_FULL}
+rm -rf ${PROGRAM_NAME}-build
+ln -s ../build/${PROGRAM_FULL} $INSTALL_DIR/${PROGRAM_NAME}
 SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/apply_installation.sh $PROGRAM_NAME $INSTALL_DIR

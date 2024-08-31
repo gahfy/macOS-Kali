@@ -43,6 +43,14 @@ if ((IS_TEMP == 0)); then
     fi
   fi
 fi
+
+if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh temp-cmake && ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh cmake; then
+  if ! TEMP=1 $BASE_DIR/cmake-3.30.2.sh 2> /dev/null; then
+    echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs cmake (at least temporary version) which failed to install"
+    exit 1
+  fi
+fi
+
 if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_PREFIX}zlib; then
   if ! TEMP=$IS_TEMP $BASE_DIR/zlib-1.3.1.sh 2> /dev/null; then
     echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs ${TEMP_PREFIX}zlib which failed to install"
@@ -52,13 +60,6 @@ fi
 if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_PREFIX}lz4; then
   if ! TEMP=$IS_TEMP $BASE_DIR/lz4-1.10.0.sh 2> /dev/null; then
     echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs ${TEMP_PREFIX}lz4 which failed to install"
-    exit 1
-  fi
-fi
-
-if ! SOFTWARES_DIR=$SOFTWARES_DIR $BASE_DIR/utils/detect-installation.sh ${TEMP_PREFIX}cmake; then
-  if ! TEMP=$IS_TEMP $BASE_DIR/cmake-3.30.2.sh 2> /dev/null; then
-    echo "$TEMP_PREFIX$PROGRAM_NAME $PROGRAM_VERSION needs ${TEMP_PREFIX}cmake which failed to install"
     exit 1
   fi
 fi
